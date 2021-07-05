@@ -28,46 +28,42 @@ def check_winning_combinations(computer_step):
                 break
 
 
+def ask_step(user_first):
+    while True:
+        # step_user = list(map(int, (input("Введите свой ход: ").split(" "))))
+        # проверка ввода
+        step_user = input("Введите свой ход: ").split(" ")
+        if len(step_user) != 2:
+            print("Введите две координаты!")
+            continue
+        i = step_user[0]
+        j = step_user[1]
+        if not (i.isdigit()) or not (j.isdigit()):
+            print("Нужно вводить цифры!")
+            continue
+        i, j = int(i), int(j)
+        if not (0 <= i <= 2) or not (0 <= j <= 2):
+            print("Введите значение от 0 до 2!")
+            continue
+        if matrix[i][j] != "-":
+            print("Данное поле уже занято, введите другой ход!")
+        else:
+            break
+    matrix[i][j] = int(user_first)
+
+
 def entering_move(user_first, is_first):
     computer_step = int(not user_first)
     if user_first:
         if is_first:
-            while True:
-                #step_user = list(map(int, (input("Введите свой ход: ").split(" "))))
-                # проверка ввода
-                step_user = input("Введите свой ход: ").split(" ")
-                if len(step_user)!=2:
-                    print("Введите две координаты!")
-                    continue
-                i = step_user[0]
-                j = step_user[1]
-                if not(i.isdigit()) or not(j.isdigit()):
-                    print("Нужно вводить цифры!")
-                    continue
-                i, j = int(i), int(j)
-                if not(0<=i<=2) or not(0<=j<=2):
-                    print("Введите значение от 0 до 2!")
-                    continue
-                if matrix[i][j]!="-":
-                    print("Данное поле уже занято, введите другой ход!")
-                else:
-                    break
-            matrix[i][j] = int(user_first)
+            ask_step(user_first)
         else:
             check_winning_combinations(computer_step)
     else:
         if is_first:
             check_winning_combinations(computer_step)
         else:
-            while True:
-                step_user = list(map(int, (input("Введите свой ход: ").split(" "))))
-                i = step_user[0]
-                j = step_user[1]
-                if matrix[i][j] != "-":
-                    print("Данное поле уже занято, введите другой ход!")
-                else:
-                    break
-            matrix[i][j] = int(user_first)
+            ask_step(user_first)
 
 
 def check_result_game(user_step):
@@ -102,7 +98,16 @@ def check_result_game(user_step):
 
 
 print_matrix()
-who_first = int(input("Кто ходит первым? 1 - Вы, 0 - компьютер "))
+while True:
+    who_first = input("Кто ходит первым? 1 - Вы, 0 - компьютер ")
+    if not(who_first.isdigit()):
+        print("Введите 0  или 1")
+        continue
+    who_first = int(who_first)
+    if who_first!=0 and who_first!=1:
+        print("Введите 0  или 1")
+    else:
+        break
 user_first = int(who_first == 1)
 print("Формат ввода - x y")
 print("x - номер строки, от 0 до 2")
@@ -115,6 +120,7 @@ while True:
         print(result)
         break
     entering_move(user_first, False)
+    print_matrix()
 
 print_matrix()
 
